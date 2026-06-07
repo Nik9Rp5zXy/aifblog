@@ -20,6 +20,10 @@ async function runDeploy() {
       export DOMAIN="aifblog.m4u.pro"
       export SUDO_PASS="L0calappdata"
 
+      # Rastgele boş bir port bul (Python ile)
+      FREE_PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+      echo "Bulunan bos port: $FREE_PORT"
+
       if [ ! -d "$REMOTE_DIR/.git" ]; then
         echo $SUDO_PASS | sudo -S mkdir -p $REMOTE_DIR
         echo $SUDO_PASS | sudo -S chown -R $USER:$USER $REMOTE_DIR
@@ -39,14 +43,16 @@ async function runDeploy() {
       npx prisma db push
 
       echo "Next.js uygulamasi build ediliyor..."
+      rm -rf .next
       npm run build
 
-      echo "PM2 sureci yeniden baslatiliyor (Port 3005)..."
+      echo "PM2 sureci yeniden baslatiliyor (Port $FREE_PORT)..."
       if pm2 list | grep -q "$APP_NAME"; then
-        pm2 restart $APP_NAME
-      else
-        pm2 start npm --name "$APP_NAME" -- run start
+        pm2 delete $APP_NAME
       fi
+      
+      # PM2'ye doğrudan Next.js binary'si ile portu belirterek başlat
+      pm2 start node_modules/next/dist/bin/next --name "$APP_NAME" -- start -p $FREE_PORT
       pm2 save
 
       echo "Nginx konfigrasyonu yapiliyor..."
@@ -56,7 +62,7 @@ server {
     server_name $DOMAIN;
 
     location / {
-        proxy_pass http://localhost:3005;
+        proxy_pass http://127.0.0.1:$FREE_PORT;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \\$http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -72,7 +78,7 @@ EOF"
       echo "Certbot (SSL) Kurulumu Yapiliyor..."
       echo $SUDO_PASS | sudo -S certbot --nginx -d $DOMAIN --non-interactive --agree-tos -m admin@$DOMAIN --redirect
       
-      echo "Deploy islemi basariyla tamamlandi!"
+      echo "Deploy islemi basariyla tamamlandi! Uygulama $FREE_PORT portunda calisiyor."
     `;
     
     const result = await ssh.execCommand(commands);
