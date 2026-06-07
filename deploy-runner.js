@@ -35,6 +35,12 @@ async function runDeploy() {
       git reset --hard origin/$GITHUB_BRANCH
       git pull origin $GITHUB_BRANCH
 
+      # NextAuth.js icin gerekli cevre degiskenlerini (Environment Variables) olustur
+      echo "NEXTAUTH_URL=\"https://$DOMAIN\"" > .env
+      if ! grep -q "NEXTAUTH_SECRET" .env; then
+        echo "NEXTAUTH_SECRET=\"$(openssl rand -base64 32)\"" >> .env
+      fi
+
       echo "Npm paketleri kuruluyor..."
       npm install
 
