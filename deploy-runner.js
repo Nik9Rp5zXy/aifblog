@@ -41,7 +41,7 @@ async function runDeploy() {
       echo "Next.js uygulamasi build ediliyor..."
       npm run build
 
-      echo "PM2 sureci yeniden baslatiliyor..."
+      echo "PM2 sureci yeniden baslatiliyor (Port 3005)..."
       if pm2 list | grep -q "$APP_NAME"; then
         pm2 restart $APP_NAME
       else
@@ -56,7 +56,7 @@ server {
     server_name $DOMAIN;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \\$http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -68,6 +68,9 @@ EOF"
 
       echo $SUDO_PASS | sudo -S ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
       echo $SUDO_PASS | sudo -S nginx -t && echo $SUDO_PASS | sudo -S systemctl reload nginx
+      
+      echo "Certbot (SSL) Kurulumu Yapiliyor..."
+      echo $SUDO_PASS | sudo -S certbot --nginx -d $DOMAIN --non-interactive --agree-tos -m admin@$DOMAIN --redirect
       
       echo "Deploy islemi basariyla tamamlandi!"
     `;
