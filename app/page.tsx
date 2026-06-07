@@ -34,7 +34,7 @@ export default async function Home() {
               <div className="w-2 h-2 bg-neutral-400 rounded-full" />
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-neutral-900 p-6 rounded-2xl border border-neutral-800">
-              <time className="text-sm font-medium text-neutral-500 mb-2 block">2026 - Günümüz</label>
+              <time className="text-sm font-medium text-neutral-500 mb-2 block">2026 - Günümüz</time>
               <h3 className="text-xl font-bold text-white mb-1">Kurucu & Lead Developer</h3>
               <p className="text-neutral-400 text-sm">Ultra-premium dijital deneyimler geliştiriliyor.</p>
             </div>
