@@ -6,6 +6,8 @@ import { CustomCursor } from "@/components/ui/CustomCursor";
 
 const inter = Inter({ subsets: ["latin"] });
 
+import { Navigation } from "@/components/ui/Navigation";
+
 export const metadata: Metadata = {
   title: "m4u.pro | Digital Experience",
   description: "Ultra-Premium Personal Portfolio and Blog.",
@@ -21,6 +23,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-neutral-950 text-neutral-100 antialiased`}>
         <SmoothScrollProvider>
           <CustomCursor />
+          <Navigation />
           {children}
         </SmoothScrollProvider>
       </body>
