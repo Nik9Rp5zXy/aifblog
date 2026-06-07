@@ -51,12 +51,13 @@ async function runDeploy() {
         pm2 delete $APP_NAME
       fi
       
-      # PM2'ye doğrudan Next.js binary'si ile portu belirterek başlat
+      # PM2'ye dogrudan Next.js binary'si ile portu belirterek baslat
       pm2 start node_modules/next/dist/bin/next --name "$APP_NAME" -- start -p $FREE_PORT
       pm2 save
 
       echo "Nginx konfigrasyonu yapiliyor..."
-      echo $SUDO_PASS | sudo -S bash -c "cat > /etc/nginx/sites-available/$DOMAIN << 'EOF'
+      if ! sudo test -f /etc/nginx/sites-available/$DOMAIN; then
+        echo $SUDO_PASS | sudo -S bash -c "cat > /etc/nginx/sites-available/$DOMAIN << 'EOF'
 server {
     listen 80;
     server_name $DOMAIN;
@@ -71,11 +72,14 @@ server {
     }
 }
 EOF"
+        echo $SUDO_PASS | sudo -S ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
+      else
+        echo $SUDO_PASS | sudo -S sed -i -E 's/proxy_pass http:\/\/(localhost|127\.0\.0\.1):[0-9]+;/proxy_pass http:\/\/127.0.0.1:'$FREE_PORT';/' /etc/nginx/sites-available/$DOMAIN
+      fi
 
-      echo $SUDO_PASS | sudo -S ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
       echo $SUDO_PASS | sudo -S nginx -t && echo $SUDO_PASS | sudo -S systemctl reload nginx
       
-      echo "Certbot (SSL) Kurulumu Yapiliyor..."
+      echo "Certbot (SSL) Kurulumu/Yenilemesi Yapiliyor..."
       echo $SUDO_PASS | sudo -S certbot --nginx -d $DOMAIN --non-interactive --agree-tos -m admin@$DOMAIN --redirect
       
       echo "Deploy islemi basariyla tamamlandi! Uygulama $FREE_PORT portunda calisiyor."
