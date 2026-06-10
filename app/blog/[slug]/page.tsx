@@ -4,9 +4,10 @@ import { ReadingProgress } from "@/components/ui/ReadingProgress";
 
 const prisma = new PrismaClient();
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const post = await prisma.post.findUnique({
-    where: { slug: params.slug },
+    where: { slug, is_published: true },
   });
 
   if (!post) return { title: "Yazı Bulunamadı" };
@@ -17,9 +18,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const post = await prisma.post.findUnique({
-    where: { slug: params.slug },
+    where: { slug, is_published: true },
   });
 
   if (!post || !post.is_published) {

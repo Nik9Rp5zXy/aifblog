@@ -1,19 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Doğrudan DOM güncellemesi için Motion Value kullanımı (Sıfır state render gecikmesi)
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+
+  // Yumuşak (Smooth) takip için Spring animasyonu
+  const springConfig = { damping: 25, stiffness: 400, mass: 0.5 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (!isVisible) setIsVisible(true);
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).closest("a, button, input, textarea")) {
+      const target = e.target as HTMLElement;
+      if (target.closest("a, button, input, textarea, [role='button']")) {
         setIsHovered(true);
       } else {
         setIsHovered(false);
@@ -27,38 +39,38 @@ export function CustomCursor() {
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, []);
+  }, [cursorX, cursorY, isVisible]);
 
-  const variants = {
-    default: {
-      x: mousePosition.x - 16,
-      y: mousePosition.y - 16,
-      height: 32,
-      width: 32,
-      backgroundColor: "rgba(255, 255, 255, 0)",
-      border: "1px solid rgba(255, 255, 255, 0.5)",
-    },
-    hover: {
-      x: mousePosition.x - 24,
-      y: mousePosition.y - 24,
-      height: 48,
-      width: 48,
-      backgroundColor: "rgba(255, 255, 255, 0.1)",
-      border: "1px solid rgba(255, 255, 255, 0.8)",
-    },
-  };
+  if (typeof window === 'undefined') return null;
 
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-50 mix-blend-difference hidden md:block"
-        variants={variants}
-        animate={isHovered ? "hover" : "default"}
-        transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.5 }}
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-50 mix-blend-difference hidden md:block"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+          translateX: "-50%",
+          translateY: "-50%",
+          opacity: isVisible ? 1 : 0,
+        }}
+        animate={{
+          height: isHovered ? 48 : 32,
+          width: isHovered ? 48 : 32,
+          backgroundColor: isHovered ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0)",
+          border: isHovered ? "1px solid rgba(255, 255, 255, 0.8)" : "1px solid rgba(255, 255, 255, 0.5)",
+        }}
+        transition={{ type: "tween", duration: 0.15 }}
       />
-      <div 
+      <motion.div 
         className="fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-50 mix-blend-difference hidden md:block"
-        style={{ transform: `translate(${mousePosition.x - 4}px, ${mousePosition.y - 4}px)` }}
+        style={{ 
+          x: cursorX, 
+          y: cursorY,
+          translateX: "-50%",
+          translateY: "-50%",
+          opacity: isVisible ? 1 : 0,
+        }}
       />
     </>
   );

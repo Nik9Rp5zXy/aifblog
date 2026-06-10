@@ -79,7 +79,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex font-sans">
+      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex font-sans">
         {!isLoginPage && <AdminSidebar />}
         <main className="flex-1 overflow-y-auto h-screen">
           {children}

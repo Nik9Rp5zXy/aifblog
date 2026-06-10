@@ -35,7 +35,7 @@ export default async function BlogIndexPage() {
             <Link 
               href={`/blog/${post.slug}`} 
               key={post.id} 
-              className="group flex flex-col bg-neutral-900/30 backdrop-blur-sm border border-neutral-800/50 rounded-3xl overflow-hidden hover:border-neutral-700/80 hover:bg-neutral-900/60 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)]"
+              className="group flex flex-col bg-neutral-950 border border-neutral-800 rounded-2xl overflow-hidden hover:border-neutral-700 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.8)]"
             >
               <div className="aspect-[16/10] w-full relative overflow-hidden bg-neutral-900">
                 {post.cover_image ? (
