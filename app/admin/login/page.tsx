@@ -36,7 +36,7 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-neutral-950 p-4">
       <div className="w-full max-w-md p-8 bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white tracking-tight">m4u.pro</h1>
+          <h1 className="text-3xl font-bold text-white tracking-tight">AIFBlog</h1>
           <p className="text-neutral-500 mt-2">Yönetim paneline giriş yapın</p>
         </div>
 

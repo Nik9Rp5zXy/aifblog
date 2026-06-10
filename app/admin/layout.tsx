@@ -34,7 +34,7 @@ function AdminSidebar() {
   return (
     <aside className="w-64 bg-neutral-950 border-r border-neutral-800 flex flex-col h-screen sticky top-0">
       <div className="p-6">
-        <h2 className="text-xl font-bold tracking-tighter text-white">m4u.pro Admin</h2>
+        <h2 className="text-xl font-bold tracking-tighter text-white">AIFBlog Admin</h2>
         <p className="text-sm text-neutral-500 mt-1">{session?.user?.email}</p>
       </div>
       

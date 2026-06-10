@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ["latin"] });
 import { Navigation } from "@/components/ui/Navigation";
 
 export const metadata: Metadata = {
-  title: "m4u.pro | Digital Experience",
-  description: "Ultra-Premium Personal Portfolio and Blog.",
+  title: "AIFBlog | Yapay Zeka & Teknoloji",
+  description: "Yapay zeka, makine öğrenimi ve geleceğin teknolojileri hakkında vizyoner içerikler ve portfolyo.",
 };
 
 export default function RootLayout({

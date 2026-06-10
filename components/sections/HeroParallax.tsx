@@ -57,14 +57,14 @@ export function HeroParallax() {
           ref={textRef}
           className="text-5xl md:text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 mb-6"
         >
-          Dijital Sınırları<br />Yeniden Çiziyoruz.
+          Yapay Zeka ile<br />Geleceği Kodluyoruz.
         </h1>
         
         <p 
           ref={subRef}
           className="text-lg md:text-2xl text-neutral-400 font-light max-w-2xl mb-12"
         >
-          Ultra-premium web deneyimleri, akıcı animasyonlar ve mükemmel performans.
+          Yapay zeka teknolojileri, derinlemesine analizler ve sınırları zorlayan projeler.
         </p>
 
         <MagneticButton>
