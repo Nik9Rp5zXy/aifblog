@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Github, Mail, Globe } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -18,14 +17,14 @@ export function Footer() {
         </div>
 
         <div className="flex items-center gap-6">
-          <a href="#" className="text-[var(--color-text-secondary)] hover:text-[var(--color-brand-cyan)] transition-colors" aria-label="Website">
-            <Globe className="w-5 h-5" />
+          <a href="#" className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-brand-cyan)] transition-colors" aria-label="Website">
+            Web
           </a>
-          <a href="#" className="text-[var(--color-text-secondary)] hover:text-white transition-colors" aria-label="GitHub">
-            <Github className="w-5 h-5" />
+          <a href="#" className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-white transition-colors" aria-label="GitHub">
+            GitHub
           </a>
-          <a href="#" className="text-[var(--color-text-secondary)] hover:text-[var(--color-brand-amber)] transition-colors" aria-label="Email">
-            <Mail className="w-5 h-5" />
+          <a href="#" className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-brand-amber)] transition-colors" aria-label="Email">
+            İletişim
           </a>
         </div>
 
