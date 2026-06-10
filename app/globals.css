@@ -1,39 +1,54 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0a0a0a;
-  --color-foreground: #ededed;
+  --color-brand-cyan: #00f0ff;
+  --color-brand-amber: #ff6b2b;
+  
+  --color-bg-primary: #0a0a0a;
+  --color-bg-surface: #141414;
+  --color-bg-hover: #1a1a1a;
+  
+  --color-text-primary: #e8e8e8;
+  --color-text-secondary: #888888;
+  
+  --color-border-subtle: #222222;
+
+  --font-space: "Space Grotesk", sans-serif;
+  --font-inter: "Inter", sans-serif;
 }
 
 @layer base {
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    /* Hide scrollbar for a cleaner look */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    @apply bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] font-inter antialiased selection:bg-[var(--color-brand-cyan)] selection:text-black min-h-screen relative;
   }
-  body::-webkit-scrollbar {
-    display: none;
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-space font-bold tracking-tight text-white;
   }
 }
 
-html.lenis, html.lenis body {
-  height: auto;
-}
+@layer utilities {
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
+  .solid-card {
+    @apply bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-sm transition-all duration-300;
+  }
 
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
+  .solid-card:hover {
+    @apply bg-[var(--color-bg-hover)] border-[var(--color-brand-cyan)] -translate-y-1 shadow-[0_0_15px_rgba(0,240,255,0.1)];
+  }
 
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
+  .input-field {
+    @apply w-full bg-[var(--color-bg-primary)] border border-[var(--color-border-subtle)] rounded-sm px-4 py-3 text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-brand-cyan)] focus:ring-1 focus:ring-[var(--color-brand-cyan)] transition-colors font-inter placeholder:text-[var(--color-text-secondary)];
+  }
 }

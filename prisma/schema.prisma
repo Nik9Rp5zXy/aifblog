@@ -16,16 +16,37 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Post {
-  id               String   @id @default(cuid())
+  id               String    @id @default(cuid())
   title            String
-  slug             String   @unique
+  slug             String    @unique
   content          String
   meta_description String?
   cover_image      String?
-  is_published     Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  reading_time     Int?      @default(5)
+  categoryId       String?
+  category         Category? @relation(fields: [categoryId], references: [id])
+  is_published     Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  url       String   @unique
+  filename  String
+  mimetype  String?
+  size      Int?
+  createdAt DateTime @default(now())
 }
 
 model Project {
